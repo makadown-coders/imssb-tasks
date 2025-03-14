@@ -25,9 +25,9 @@ El propósito de este proyecto es explorar soluciones tecnológicas para la gest
 ### Frontend steps (/IMSSB-Tasks/client) 
 
 ```
-ng new imssb-tasks --directory ./
+ng new imssb-tasks --skip-git --directory ./ 
 ```
-
+el --skip-git es debido a que en este repo conviven backend y frontend
 
 ### Backend steps (/IMSSB-Tasks/server) 
 
@@ -43,6 +43,8 @@ npm install ts-node -D
 npm install express
 npm install mongoose
 npm install socket.io
+npm install @types/express -D
+npm install @types/node -D
 ```
 
 con "-D" significa que estas dependencias solo son usadas en Desarrollo.
@@ -52,6 +54,8 @@ con "-D" significa que estas dependencias solo son usadas en Desarrollo.
 - express es un framework para nodejs que permite crear servidores web, usar middleware, rutas e integracion con base de datos.
 - mongoose es una herramienta para trabajar con MongoDB el cual se describe mas adelante.
 - socket.io sirve para aplicaciones que requieren comunicacion bidireccional en tiempo real entre servidor y cliente.
+- @types/express es esencial para desarrollar aplicaciones Express con Typescript
+- @types/node proporciona definiciones de tipos para Node.js, permitiendo a los desarrolladores usar TypeScript con Node.js de manera más efectiva.
 
 el archivo package.json > "scripts" remover el nodo "test" y escribir algo como:
 

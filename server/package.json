@@ -10,6 +10,8 @@
     "start": "nodemon src/server.ts"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2"
   },
