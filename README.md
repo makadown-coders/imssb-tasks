@@ -45,17 +45,25 @@ npm install mongoose
 npm install socket.io
 npm install @types/express -D
 npm install @types/node -D
+npm install validator 
+npm install @types/validator -D
+npm install bcryptjs
+npm install @types/bcryptjs
 ```
 
 con "-D" significa que estas dependencias solo son usadas en Desarrollo.
 
-- nodemon sirve para que se recargue el servidor cada que se modifica el código (tal como lo hace Angular de forma predeterminada)
+- nodemon sirve para que se recargue el servidor cada que se modifica el c贸digo (tal como lo hace Angular de forma predeterminada)
 - ts-node permite ejecutar archivos TypeScript sin necesidad de compilarlos previamente a JavaScript. Esto hace que el desarrollo sea más rápido y eficiente. 
 - express es un framework para nodejs que permite crear servidores web, usar middleware, rutas e integracion con base de datos.
 - mongoose es una herramienta para trabajar con MongoDB el cual se describe mas adelante.
 - socket.io sirve para aplicaciones que requieren comunicacion bidireccional en tiempo real entre servidor y cliente.
 - @types/express es esencial para desarrollar aplicaciones Express con Typescript
 - @types/node proporciona definiciones de tipos para Node.js, permitiendo a los desarrolladores usar TypeScript con Node.js de manera más efectiva.
+- validator es una biblioteca de validación (correos, urls, telefonos, etc) y sanitización de cadenas de texto en JavaScript.
+- @types/validator proporciona definiciones de tipos para TypeScript para el paquete validator
+- bcryptjs es una biblioteca de JavaScript que se utiliza para hashing de contraseñas.
+- @types/bcryptjs proporciona definiciones de tipos para TypeScript para el paquete bcryptjs
 
 el archivo package.json > "scripts" remover el nodo "test" y escribir algo como:
 
