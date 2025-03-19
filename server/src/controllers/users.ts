@@ -25,3 +25,37 @@ export const register = async (
     }
 };
 
+export const login = async (
+    req: Request,
+    res: Response,
+    next: NextFunction) => {
+    try {
+        // deserializo el req   
+      const { email, password } = req.body;
+  
+      // 1️⃣ Verificar que email y password sean proporcionados
+      if (!email || !password) {
+        res.status(400).json({ message: "Email y contraseña son requeridos." });
+        return;
+      }
+  
+      // 2️⃣ Buscar usuario por email (select +password para obtener el password dado que es privado)
+      const usuario = await UserModel.findOne({ email }).select('+password');
+      if (!usuario) {
+        res.status(422).json({ message: "Credenciales incorrectas." });
+        return;
+      }
+  
+      // 3️⃣ Comparar contraseñas
+      const isMatch = await usuario.validatePassword(password);
+      if (!isMatch) {
+        res.status(422).json({ message: "Credenciales incorrectas." });
+        return;
+      }
+      res.send(normalizeUser(usuario));
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+

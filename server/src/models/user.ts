@@ -12,8 +12,7 @@ const userSchema = new Schema<UserDocument>({
     },
     username: {
         type: String,
-        required: [true, 'Username es requerido'],
-        unique: true
+        required: [true, 'Username es requerido']
     },
     password: {
         type: String,
@@ -40,8 +39,8 @@ userSchema.pre('save', async function(next) {
     }
 });
 
-userSchema.methods.validatePassword = async function(password: string) {
-    return await bcryptjs.compare(password, this.password);
+userSchema.methods.validatePassword = function(password: string) {
+    return bcryptjs.compare(password, this.password);
 }
 
 export default model<UserDocument>('User', userSchema);
