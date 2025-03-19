@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import UserModel from '../models/user';
 import moongoose from 'mongoose';
 import { normalizeUser } from '../utils/normalizeUser';
+import { ExpressRequestInterface } from '../types/expressRequest.interface';
 
 export const register = async (
     req: Request,
@@ -59,3 +60,17 @@ export const login = async (
   };
   
 
+export const currentUser = async (
+    req: ExpressRequestInterface,
+    res: Response,
+    next: NextFunction) => {
+    try {
+        if (!req.user) {
+            res.sendStatus(401);
+            return;
+        }
+        res.send(normalizeUser(req.user));
+    } catch (error) {
+        next(error);
+    }
+};
