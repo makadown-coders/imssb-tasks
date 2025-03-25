@@ -6,10 +6,10 @@ import { RegisterRequestInterface } from '../types/registerRequest.interface';
 import { LoginRequestInterface } from '../types/loginRequest.interface';
 import { environment } from '../../../environments/environment';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
-    currentUser$ = new BehaviorSubject<CurrentUserInterface|null|undefined>(undefined);
+    currentUser$ = new BehaviorSubject<CurrentUserInterface | null | undefined>(undefined);
     /**
      * Un observable `isLoggedIn$` que emite un valor booleano que indica si un usuario ha iniciado sesión. Esto se logra mediante:
      * 1. Filtrando los valores `undefined` del observable `currentUser$`.
@@ -17,18 +17,18 @@ export class AuthService {
      * En esencia, `isLoggedIn$` es un observable derivado que simplifica el observable `currentUser$` en un simple indicador de inicio/cierre de sesión.
      */
     isLoggedIn$ = this.currentUser$.pipe(
-        filter( currentUser => currentUser !== undefined),
-        map((currentUser) => Boolean(currentUser) ));
+        filter(currentUser => currentUser !== undefined),
+        map((currentUser) => Boolean(currentUser)));
 
     constructor(private httpClient: HttpClient) { }
     getCurrentUser(): Observable<CurrentUserInterface> {
         if (environment.production) {
             console.log('Running in PRODUCTION mode');
             // Enable production-specific logic (e.g., analytics, stricter error handling)
-          } else {
+        } else {
             console.log('Running in DEVELOPMENT mode');
             // Enable dev-only features (e.g., logging, mock APIs)
-          }
+        }
         const url = environment.apiUrl + '/user';
         return this.httpClient.get<CurrentUserInterface>(url);
     }
@@ -47,7 +47,13 @@ export class AuthService {
         return this.httpClient.post<CurrentUserInterface>(url, loginRequest);
     }
 
-    setCurrentUser(currentUser: CurrentUserInterface|null): void {
+    setCurrentUser(currentUser: CurrentUserInterface | null): void {
         this.currentUser$.next(currentUser);
+    }
+
+
+    logout(): void {
+        localStorage.removeItem('token');
+        this.currentUser$.next(null);
     }
 }
