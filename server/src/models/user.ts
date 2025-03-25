@@ -7,7 +7,7 @@ const userSchema = new Schema<UserDocument>({
     email: {
         type: String,
         required: [true, 'Email es requerido'],
-        validate: [validator.isEmail, 'Email no es valido'],
+        validate: [validator.isEmail, 'Email no es válido'],
         createIndexes: { unique: true } // esto solo sera creado despues de reiniciar la BD 
     },
     username: {

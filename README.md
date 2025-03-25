@@ -48,12 +48,13 @@ npm install @types/node -D
 npm install validator 
 npm install @types/validator -D
 npm install bcryptjs
-npm install @types/bcryptjs
+npm install @types/bcryptjs -D
+npm install cors
 ```
 
 con "-D" significa que estas dependencias solo son usadas en Desarrollo.
 
-- nodemon sirve para que se recargue el servidor cada que se modifica el c贸digo (tal como lo hace Angular de forma predeterminada)
+- nodemon sirve para que se recargue el servidor cada que se modifica el código (tal como lo hace Angular de forma predeterminada)
 - ts-node permite ejecutar archivos TypeScript sin necesidad de compilarlos previamente a JavaScript. Esto hace que el desarrollo sea más rápido y eficiente. 
 - express es un framework para nodejs que permite crear servidores web, usar middleware, rutas e integracion con base de datos.
 - mongoose es una herramienta para trabajar con MongoDB el cual se describe mas adelante.
@@ -64,6 +65,7 @@ con "-D" significa que estas dependencias solo son usadas en Desarrollo.
 - @types/validator proporciona definiciones de tipos para TypeScript para el paquete validator
 - bcryptjs es una biblioteca de JavaScript que se utiliza para hashing de contraseñas.
 - @types/bcryptjs proporciona definiciones de tipos para TypeScript para el paquete bcryptjs
+- cors es esencial para aplicaciones web que necesitan interactuar con APIs en diferentes dominios. Te permite configurar políticas de acceso y mejorar la seguridad de tu aplicación.
 
 el archivo package.json > "scripts" remover el nodo "test" y escribir algo como:
 

@@ -1,0 +1,26 @@
+<div class="login-page">
+  <a routerlink="/">
+    <img src="imssb-logo.svg" class="imssb-main-logo" />
+  </a>
+  <div class="form-container">
+    <div class="login-header">Registro de usuario</div>
+    @if(error())
+    {
+    @let errors = error()!.split(', ');
+    <div class="errors">
+      <li *ngFor="let er of errors">{{ er }}</li>
+    </div>
+    }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input formControlName="email" type="email" placeholder="Correo" name="email" class="login-input" />
+      <input formControlName="username" type="text" placeholder="Username" name="username" class="login-input" />
+      <input formControlName="password" type="password" placeholder="Contraseña" name="password" class="login-input" />
+      <button type="submit" class="login-submit-button">Crear cuenta</button>
+
+    </form>
+    <div class="bottom-form-links">
+      <span>¿Ya tienes una cuenta? &nbsp; </span>
+      <a routerLink="/login" class="register-link"> Inicia sesión</a>
+    </div>
+  </div>
+</div>
