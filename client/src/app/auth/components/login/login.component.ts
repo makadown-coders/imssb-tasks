@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { SocketService } from '../../../shared/services/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent {
   private authService: AuthService = inject(AuthService);
   private fb: FormBuilder = inject(FormBuilder);
   private router = inject(Router);
+  private socketService = inject(SocketService);
   form: FormGroup
   constructor() {
     this.form = this.fb.group({
@@ -30,6 +32,7 @@ export class LoginComponent {
       next: (currentUser) => {
         console.log('Usuario Activo:', currentUser);
         this.authService.setToken(currentUser);
+        this.socketService.setupSocketConnection(currentUser);
         this.authService.setCurrentUser(currentUser);
         this.error.set(null);
         this.router.navigateByUrl('/');

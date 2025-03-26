@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
+import { ISocket } from '../types/socket.interface';
 import BoardModel from '../models/board';
 import { ExpressRequestInterface } from '../types/expressRequest.interface';
 
@@ -61,18 +62,18 @@ export const getBoard = async (
 
 export const joinBoard = (
     io: Server,
-    socket: Socket,
+    socket: ISocket,
     data: { boardId: string }
 ) => {
-    console.log('socket de servidor incorporándose al board', data.boardId);
+    //console.log('incorporándose al board', socket.user);
     socket.join(data.boardId);
 };
 
 export const leaveBoard = (
     io: Server,
-    socket: Socket,
+    socket: ISocket,
     data: { boardId: string }
 ) => {
-    console.log('socket de servidor abandonando el board', data.boardId);
+    //console.log('abandonando el board', socket.user);
     socket.leave(data.boardId);
 };

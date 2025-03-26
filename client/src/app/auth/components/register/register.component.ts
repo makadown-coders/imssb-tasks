@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { SocketService } from '../../../shared/services/socket.service';
 
 @Component({
   selector: 'auth-register',
@@ -14,6 +15,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
   error = signal<string | null>(null);
+  private socketService: SocketService = inject(SocketService);
   private authService: AuthService = inject(AuthService);
   private fb: FormBuilder = inject(FormBuilder);
   form: FormGroup;
@@ -32,6 +34,7 @@ export class RegisterComponent {
       next: (currentUser) => {
         console.log('Usuario Activo:', currentUser);
         this.authService.setToken(currentUser);
+        this.socketService.setupSocketConnection(currentUser);
         this.authService.setCurrentUser(currentUser);
         this.error.set(null);
         this.router.navigateByUrl('/');
