@@ -5,7 +5,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Board } from '../../../auth/types/board.interface';
 import { BoardInterface } from '../../../shared/types/board.interface';
 import { InlineFormComponent } from '../../../shared/components/inline-form/inline-form.component';
-import { TopbarComponent } from "../../../shared/components/Topbar/Topbar.component";
+import { TopbarComponent } from "../../../shared/components/topbar/topbar.component";
 
 @Component({
   selector: 'app-boards',
@@ -19,7 +19,6 @@ export class BoardsComponent implements OnInit {
 
   ngOnInit(): void {
     this.boardService.getBoards().subscribe((boards) => {
-      console.log('Boards:', boards);
       this.boards.set(boards);
     });
   }

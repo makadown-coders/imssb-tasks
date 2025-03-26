@@ -7,10 +7,15 @@ import * as boardsController from './controllers/boards';
 import bodyParser from 'body-parser';
 import authMiddleware from './middlewares/auth';
 import cors from 'cors';
+import { SocketServerEvents } from './types/socketServerEvents.enum';
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+    },
+});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,9 +42,15 @@ app.post('/api/users/login', usersController.login);
 app.get('/api/user', authMiddleware, usersController.currentUser);
 app.get('/api/boards', authMiddleware, boardsController.getBoards);
 app.post('/api/boards', authMiddleware, boardsController.createBoard);
+app.get('/api/boards/:boardId', authMiddleware, boardsController.getBoard);
 
 io.on('connection', (socket) => {
-    console.log('Socket connected');
+    socket.on(SocketServerEvents.boardsJoin, (data) => {
+        boardsController.joinBoard(io, socket, data);
+    });
+    socket.on(SocketServerEvents.boardsLeave, (data) => {
+        boardsController.leaveBoard(io, socket, data);
+    });
 });
 
 mongoose.connect('mongodb://localhost:27017/imssb-tasks').then(() => {

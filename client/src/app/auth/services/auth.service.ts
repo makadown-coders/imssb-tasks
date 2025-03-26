@@ -5,6 +5,7 @@ import { CurrentUserInterface } from '../types/currentUser.interface';
 import { RegisterRequestInterface } from '../types/registerRequest.interface';
 import { LoginRequestInterface } from '../types/loginRequest.interface';
 import { environment } from '../../../environments/environment';
+import { SocketService } from '../../shared/services/socket.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,7 +21,9 @@ export class AuthService {
         filter(currentUser => currentUser !== undefined),
         map((currentUser) => Boolean(currentUser)));
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient,
+            private socketService: SocketService) { }
+
     getCurrentUser(): Observable<CurrentUserInterface> {
         if (environment.production) {
             console.log('Running in PRODUCTION mode');
@@ -55,5 +58,6 @@ export class AuthService {
     logout(): void {
         localStorage.removeItem('token');
         this.currentUser$.next(null);
+        this.socketService.disconnect();
     }
 }

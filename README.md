@@ -29,6 +29,12 @@ ng new imssb-tasks --skip-git --directory ./
 ```
 el --skip-git es debido a que en este repo conviven backend y frontend
 
+además, para el front end se instalaron los paquetes siguientes:
+
+```
+npm install socket.io
+```
+
 ### Backend steps (/IMSSB-Tasks/server) 
 
 ```

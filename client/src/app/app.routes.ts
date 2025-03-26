@@ -14,6 +14,12 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'boards/:boardId',
+        loadComponent: () => import('./board/components/board/board.component')
+                                        .then(m => m.BoardComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'register',
         component: RegisterComponent,
         canActivate: [redirectIfAuthenticatedGuard]

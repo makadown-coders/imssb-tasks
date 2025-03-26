@@ -1,1 +1,6 @@
+@let tablero = board$ | async;
+
+@if(tablero) {
+    {{ tablero | json }}
+}
 <p>board works!</p>,
