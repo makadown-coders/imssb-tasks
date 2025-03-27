@@ -72,4 +72,11 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.singleBoardService.setBoard(board);
       });
   }
+
+  popo() {
+    this.socketService.emit(
+      SocketClientEvents.columnsCreate,
+      { boardId: this.boardId, title: 'nueva columna' }
+    )
+  }
 }

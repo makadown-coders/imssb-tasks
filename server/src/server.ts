@@ -72,6 +72,9 @@ io.use(async (socket: ISocket, next) => {
         socket.on(SocketServerEvents.boardsLeave, (data) => {
             boardsController.leaveBoard(io, socket, data);
         });
+        socket.on(SocketServerEvents.columnsCreate, (data) => {
+            columnsController.createColumn(io, socket, data);
+        })
     });
 
 mongoose.connect('mongodb://localhost:27017/imssb-tasks').then(() => {
