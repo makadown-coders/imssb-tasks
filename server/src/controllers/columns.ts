@@ -49,7 +49,6 @@ export const createColumn = async (
         io.to(data.boardId)
             .emit(SocketServerEvents.columnsCreateSuccess,
                 savedColumn);
-        console.log('Columna creada:', savedColumn);
     } catch (error) {
         socket.emit(SocketServerEvents.columnsCreateFailure, getErrorMessage(error));
     }
