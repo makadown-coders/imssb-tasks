@@ -65,7 +65,7 @@ export const joinBoard = (
     socket: ISocket,
     data: { boardId: string }
 ) => {
-    //console.log('incorporándose al board', socket.user);
+    console.log(`${socket.user} incorporándose al board ${data.boardId}`,);
     socket.join(data.boardId);
 };
 
@@ -74,6 +74,6 @@ export const leaveBoard = (
     socket: ISocket,
     data: { boardId: string }
 ) => {
-    //console.log('abandonando el board', socket.user);
+    console.log(`${socket.user} abandonó el board ${data.boardId}`,);
     socket.leave(data.boardId);
 };

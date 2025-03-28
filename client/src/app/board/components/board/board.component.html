@@ -1,7 +1,17 @@
-@let tablero = board$ | async;
+<app-topbar></app-topbar>
 
-@if(tablero) {
-    {{ tablero | json }}
-}
-<p>board works!</p>,
-<button (click)="popo()"> TEST!</button>
+<div class="board" *ngIf="data$ | async as data">
+    <div class="board-header-container">INLINE FORM BOARD</div>
+    <div class="columns">
+        <div class="column" *ngFor="let column of data.columns">
+            <div class="column-title">{{column.title}}</div>
+        </div>
+        <app-inline-form class="create-column-form"
+             defaultText="Agregar una lista"
+             [hasButton]="true"
+             buttonText="Agregar lista"
+             inputPlaceholder="Agregar nombre de columna"
+             (handleSubmit)="createColumn($event)">
+        </app-inline-form>
+    </div>
+</div>

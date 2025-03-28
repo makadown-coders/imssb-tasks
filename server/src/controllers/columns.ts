@@ -43,6 +43,7 @@ export const createColumn = async (
             userId: socket.user.id
         });
         const savedColumn = await newColumn.save();
+        console.log('Emitiendo columna creada al board:', savedColumn);
         /* Se emite el evento columnasCreateSuccess a todos los clientes conectados 
             que estén suscritos a la sala con el ID data.boardId, 
             pasando la columna guardada recién creada como dato.*/
