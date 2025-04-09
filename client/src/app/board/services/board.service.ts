@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { SocketService } from '../../shared/services/socket.service';
 import { SocketClientEvents } from '../../shared/types/socketClientEvents.enum';
 import { ColumnInterface } from '../../shared/types/column.interface';
+import { TaskInterface } from '../../shared/types/task.interface';
 
 /**
  * Este servicio administrará el tablero en singleton, ademas de sus
@@ -14,10 +15,15 @@ export class BoardService {
     
     board$ = new BehaviorSubject<BoardInterface | null | undefined>(undefined);
     columns$ = new BehaviorSubject<ColumnInterface[]>([]);
+    tasks$ = new BehaviorSubject<TaskInterface[]>([]);
     socketService = inject(SocketService);
 
     setBoard(board: BoardInterface): void {
         this.board$.next(board);
+    }
+
+    setTasks(tasks: TaskInterface[]): void {
+        this.tasks$.next(tasks);
     }
 
     setColumns(columns: ColumnInterface[]): void {

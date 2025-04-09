@@ -12,6 +12,8 @@ import { ColumnsService } from '../../../shared/services/columns.service';
 import { TopbarComponent } from "../../../shared/components/topbar/topbar.component";
 import { InlineFormComponent } from "../../../shared/components/inline-form/inline-form.component";
 import { ColumnInputInterface } from '../../../shared/types/columnInput.interface';
+import { TaskInterface } from '../../../shared/types/task.interface';
+import { TasksService } from '../../../shared/services/tasks.service';
 
 @Component({
   selector: 'app-board',
@@ -20,10 +22,12 @@ import { ColumnInputInterface } from '../../../shared/types/columnInput.interfac
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent implements OnInit, OnDestroy {
+
   boardId: string = '';
   data$: Observable<{
     board: BoardInterface;
-    columns: ColumnInterface[]
+    columns: ColumnInterface[],
+    tasks: TaskInterface[]
   }>;
   private destroy$ = new Subject<void>();
 
@@ -33,6 +37,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   private singleBoardService = inject(BoardService);
   private socketService = inject(SocketService);
   private columnsService = inject(ColumnsService);
+  private tasksService = inject(TasksService);
 
   constructor() {
     const boardId = this.route.snapshot.paramMap.get('boardId');
@@ -54,10 +59,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.data$ = combineLatest([
       this.singleBoardService.board$.pipe(filter(Boolean)),
       this.singleBoardService.columns$,
+      this.singleBoardService.tasks$
     ]).pipe(
-      map(([board, columns]) => ({
+      map(([board, columns, tasks]) => ({
         board,
-        columns
+        columns,
+        tasks
       }))
     );
   }
@@ -106,6 +113,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       .subscribe((columns) => {
         this.singleBoardService.setColumns(columns);
       });
+    this.tasksService.getTasks(this.boardId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((tasks) => {
+        this.singleBoardService.setTasks(tasks);
+      });
   }
 
   createColumn(title: string): void {
@@ -114,5 +126,9 @@ export class BoardComponent implements OnInit, OnDestroy {
       boardId: this.boardId
     };
     this.columnsService.createColumn(columnInput);
+  }
+
+  getTasksByColumn(columnId: string, tasks: TaskInterface[]): TaskInterface[] {
+    return tasks.filter( task => task.columnId === columnId );
   }
 }

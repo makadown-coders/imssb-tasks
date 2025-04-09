@@ -9,6 +9,7 @@ import { ISocket } from './types/socket.interface';
 import * as usersController from './controllers/users';
 import * as boardsController from './controllers/boards';
 import * as columnsController from './controllers/columns';
+import * as tasksController from './controllers/tasks';
 import bodyParser from 'body-parser';
 import authMiddleware from './middlewares/auth';
 import cors from 'cors';
@@ -49,6 +50,7 @@ app.get('/api/boards', authMiddleware, boardsController.getBoards);
 app.post('/api/boards', authMiddleware, boardsController.createBoard);
 app.get('/api/boards/:boardId', authMiddleware, boardsController.getBoard);
 app.get('/api/boards/:boardId/columns', authMiddleware, columnsController.getColumns);
+app.get('/api/boards/:boardId/tasks', authMiddleware, tasksController.getTasks);
 
 
 io.use(async (socket: ISocket, next) => {
@@ -74,7 +76,10 @@ io.use(async (socket: ISocket, next) => {
         });
         socket.on(SocketServerEvents.columnsCreate, (data) => {
             columnsController.createColumn(io, socket, data);
-        })
+        });
+        socket.on(SocketServerEvents.tasksCreate, (data) => {
+            tasksController.createTask(io, socket, data);
+        });
     });
 
 mongoose.connect('mongodb://localhost:27017/imssb-tasks').then(() => {
