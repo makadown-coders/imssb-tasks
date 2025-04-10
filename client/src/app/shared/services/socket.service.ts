@@ -17,6 +17,7 @@ export class SocketService {
             },
             autoConnect: true
         });
+        console.log('Conectado al socket en ', environment.socketUrl);
     }
 
     disconnect(): void {

@@ -78,6 +78,7 @@ io.use(async (socket: ISocket, next) => {
             columnsController.createColumn(io, socket, data);
         });
         socket.on(SocketServerEvents.tasksCreate, (data) => {
+            console.log('Recibiendo en server task a crear:', data);
             tasksController.createTask(io, socket, data);
         });
     });

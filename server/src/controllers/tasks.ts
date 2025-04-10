@@ -31,7 +31,7 @@ export const getTasks = async (
 export const createTask = async (
     io: Server,
     socket: ISocket,
-    data: { boardId: string; title: string; columnId: string }) => {
+    data: { title: string; columnId: string; boardId: string; }) => {
     try {
         if (!socket.user) {
             socket.emit(SocketServerEvents.tasksCreateFailure, 'Usuario no autorizado');
@@ -40,6 +40,7 @@ export const createTask = async (
         const newTask = new TaskModel({ 
             title: data.title,
             boardId: data.boardId,
+            columnId: data.columnId,
             userId: socket.user.id
         });
         const savedTask = await newTask.save();
@@ -51,6 +52,7 @@ export const createTask = async (
             .emit(SocketServerEvents.tasksCreateSuccess,
                 savedTask);
     } catch (error) {
+        console.log('ERROR EN SERVER', error);
         socket.emit(SocketServerEvents.tasksCreateFailure, getErrorMessage(error));
     }
 };

@@ -12,7 +12,7 @@ import { TaskInterface } from '../../shared/types/task.interface';
  */
 @Injectable({ providedIn: 'root' })
 export class BoardService {
-    
+
     board$ = new BehaviorSubject<BoardInterface | null | undefined>(undefined);
     columns$ = new BehaviorSubject<ColumnInterface[]>([]);
     tasks$ = new BehaviorSubject<TaskInterface[]>([]);
@@ -32,6 +32,10 @@ export class BoardService {
 
     addNewColumn(column: ColumnInterface) {
         this.columns$.next([...this.columns$.getValue(), column]);
+    }
+
+    addNewTask(task: TaskInterface) {
+        this.tasks$.next([...this.tasks$.getValue(), task]);
     }
 
     leaveBoard(boardId: string): void {

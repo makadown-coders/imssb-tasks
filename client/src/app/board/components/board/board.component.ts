@@ -14,6 +14,8 @@ import { InlineFormComponent } from "../../../shared/components/inline-form/inli
 import { ColumnInputInterface } from '../../../shared/types/columnInput.interface';
 import { TaskInterface } from '../../../shared/types/task.interface';
 import { TasksService } from '../../../shared/services/tasks.service';
+import { TaskInputInterface } from '../../../shared/types/taskInput.interface';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-board',
@@ -22,13 +24,7 @@ import { TasksService } from '../../../shared/services/tasks.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardComponent implements OnInit, OnDestroy {
-
   boardId: string = '';
-  data$: Observable<{
-    board: BoardInterface;
-    columns: ColumnInterface[],
-    tasks: TaskInterface[]
-  }>;
   private destroy$ = new Subject<void>();
 
   // private router = inject(Router);
@@ -38,6 +34,25 @@ export class BoardComponent implements OnInit, OnDestroy {
   private socketService = inject(SocketService);
   private columnsService = inject(ColumnsService);
   private tasksService = inject(TasksService);
+  /*data$: Observable<{
+    board: BoardInterface;
+    columns: ColumnInterface[],
+    tasks: TaskInterface[]
+  }>;*/
+  data$ = toSignal(
+    combineLatest([
+      this.singleBoardService.board$.pipe(filter(Boolean)),
+      this.singleBoardService.columns$,
+      this.singleBoardService.tasks$
+    ]).pipe(
+      map(([board, columns, tasks]) => ({
+        board,
+        columns,
+        tasks
+      }))
+    ),
+    { initialValue: null } // Puedes ajustar el valor inicial según necesites
+  );
 
   constructor() {
     const boardId = this.route.snapshot.paramMap.get('boardId');
@@ -56,7 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     /* Se combina los observables board$ y columns$ para emitir un objeto con los 
     últimos datos del board y de las columnas cada vez que alguno de ellos cambie. */
-    this.data$ = combineLatest([
+   /* this.data$ = combineLatest([
       this.singleBoardService.board$.pipe(filter(Boolean)),
       this.singleBoardService.columns$,
       this.singleBoardService.tasks$
@@ -66,7 +81,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         columns,
         tasks
       }))
-    );
+    );*/
   }
 
   ngOnInit(): void {
@@ -92,6 +107,13 @@ export class BoardComponent implements OnInit, OnDestroy {
       .subscribe((column) => {
         console.log('columna creada', column);
         this.singleBoardService.addNewColumn(column);
+      });
+
+    this.socketService.escucharEvento<TaskInterface>(SocketClientEvents.tasksCreateSuccess)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((task) => {
+        console.log('tarea creada', task);
+        this.singleBoardService.addNewTask(task);
       });
   }
 
@@ -128,6 +150,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.columnsService.createColumn(columnInput);
   }
 
+  createTask(title: string, columnId: string) {
+     console.log('creando tarea', title, columnId);
+     const taskInput: TaskInputInterface = {
+       title,
+       columnId,
+       boardId: this.boardId
+     };
+     this.tasksService.createTask(taskInput);
+  }
+  
   getTasksByColumn(columnId: string, tasks: TaskInterface[]): TaskInterface[] {
     return tasks.filter( task => task.columnId === columnId );
   }

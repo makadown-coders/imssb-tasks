@@ -9,6 +9,7 @@ import { TaskInputInterface } from "../types/taskInput.interface";
 
 @Injectable({ providedIn: 'root' })
 export class TasksService {
+
     socketService = inject(SocketService);
     http = inject(HttpClient);
     constructor() { }
@@ -16,6 +17,11 @@ export class TasksService {
     getTasks(boardId: string): Observable<TaskInterface[]> {
         const url = `${environment.apiUrl}/boards/${boardId}/tasks`;
         return this.http.get<TaskInterface[]>(url);
+    }
+
+    createTask(taskInput: TaskInputInterface) {
+        console.log('emitiendo taskInput', taskInput);
+        this.socketService.emit(SocketClientEvents.tasksCreate, taskInput);
     }
 
 }
