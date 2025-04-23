@@ -3,6 +3,8 @@ import { Server } from 'socket.io';
 import { ISocket } from '../types/socket.interface';
 import BoardModel from '../models/board';
 import { ExpressRequestInterface } from '../types/expressRequest.interface';
+import { SocketServerEvents } from '../types/socketServerEvents.enum';
+import { getErrorMessage } from '../helpers';
 
 export const getBoards = async (
     req: ExpressRequestInterface,
@@ -76,4 +78,33 @@ export const leaveBoard = (
 ) => {
     console.log(`${socket.user} abandonó el board ${data.boardId}`,);
     socket.leave(data.boardId);
+};
+
+export const updateBoard = async (
+    io: Server,
+    socket: ISocket,
+    data: { boardId: string, fields: { title: string } }
+) => {
+    try {
+        console.log('data recibida', data);
+        // revisar primero si hay usuario valido
+        if (!socket.user) {
+            socket.emit(SocketServerEvents.boardsUpdateFailure,
+                'Usuario no autorizado');
+            return;
+        }
+        const updatedBoard = await BoardModel
+            .findOneAndUpdate({ _id: data.boardId }, data.fields, { new: true });
+        /* const updatedBoard = await BoardModel.findByIdAndUpdate( 
+              data.boardId, data.fields, { new: true }); */
+        console.log('Emitiendo board actualizado al board:', updatedBoard);
+        /* Se emite el evento boardsUpdateSuccess a todos los clientes conectados 
+            que estén suscritos a la sala con el ID data.boardId, 
+            pasando el board guardado recién actualizado como dato.*/
+        io.to(data.boardId)
+            .emit(SocketServerEvents.boardsUpdateSuccess,
+                updatedBoard);
+    } catch (error) {
+        socket.emit(SocketServerEvents.boardsUpdateFailure, getErrorMessage(error));
+    }
 };

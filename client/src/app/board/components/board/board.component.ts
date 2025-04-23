@@ -163,4 +163,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   getTasksByColumn(columnId: string, tasks: TaskInterface[]): TaskInterface[] {
     return tasks.filter( task => task.columnId === columnId );
   }
+
+  updateBoardName(boardName: string) {
+    this.boardsService.updateBoard(this.boardId,  boardName);
+  }
 }
